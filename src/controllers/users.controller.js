@@ -7,8 +7,7 @@ import messageError from "../utils/ErrorCauseMessage.js";
 
 export default class UsersController {
   static get(query = {}) {
-    // const { filter, opts } = getFilterAndOpts(query);
-    return UserModel.find();
+    return UserModel.find(query);
   }
 
   static async create(data) {
@@ -46,4 +45,16 @@ export default class UsersController {
     return updatedUser;
   }
 
+  static async deleteById(uid) {
+    const result = await UserModel.deleteOne({ _id: uid });
+    if (result.deletedCount === 0) {
+      CustomError.create({
+        name: "User not found",
+        cause: messageError.generatorUserIdError(uid),
+        message: `User with '${uid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return result;
+  }
 }
