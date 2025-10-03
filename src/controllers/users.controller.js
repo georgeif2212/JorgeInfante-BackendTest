@@ -28,4 +28,22 @@ export default class UsersController {
     return user;
   }
 
+  static async updateById(uid, data) {
+    const updatedUser = await UserModel.findByIdAndUpdate(uid, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      CustomError.create({
+        name: "User not found",
+        cause: messageError.generatorUserIdError(uid),
+        message: `User with '${uid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+
+    return updatedUser;
+  }
+
 }
