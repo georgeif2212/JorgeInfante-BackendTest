@@ -37,5 +37,19 @@ router.get("/users/:uid", async (req, res, next) => {
   }
 });
 
+router.put("/users/:uid", async (req, res, next) => {
+  try {
+    const {
+      body,
+      params: { uid },
+    } = req;
+
+    const updatedUser = await UserController.updateById(uid, body);
+
+    res.status(200).json(updatedUser); 
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;
