@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { __dirname } from "./utils/utils.js";
 import usersRouter from "./routers/api/users.router.js";
+import { errorHandlerMiddleware } from "./middlewares/error-handler.middleware.js";
 
 const app = express();
 
@@ -16,13 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", usersRouter);
 
-// * Middleware de manejo de errores
-app.use((error, req, res, next) => {
-  const message =
-    error instanceof Error
-      ? error.message
-      : `Ha ocurrido un error desconocido 😨: ${error}`;
-  res.status(error.statusCode || 500).json({ status: "error", message });
-});
+// ! Middleware de error
+app.use(errorHandlerMiddleware);
 
 export default app;
