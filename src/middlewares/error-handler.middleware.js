@@ -11,6 +11,11 @@ export const errorHandlerMiddleware = (error, req, res, next) => {
         cause: error.cause,
       });
       break;
-    
+    default:
+      return res.status(500).json({
+        status: `error 500`,
+        name: error.name || "InternalServerError",
+        message: error.message || "Ha ocurrido un error inesperado",
+      });
   }
 };
