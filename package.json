@@ -13,12 +13,13 @@
   "license": "ISC",
   "author": "Jorge Infante",
   "type": "module",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node .",
     "dev": "nodemon --exec 'node -r dotenv/config' ."
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.1.0"
   },
   "devDependencies": {
