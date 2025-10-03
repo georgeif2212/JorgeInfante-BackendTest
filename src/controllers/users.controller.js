@@ -7,6 +7,13 @@ import UserModel from "../models/user.model.js";
 
 export default class UsersController {
   static get(query = {}) {
-    return UserModel.find(query);
+    // const { filter, opts } = getFilterAndOpts(query);
+    return UserModel.find();
   }
+
+  static async create(data) {
+    return UserModel.create(data);
+  }
+
+  
 }
