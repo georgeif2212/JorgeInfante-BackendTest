@@ -15,5 +15,15 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
+router.post("/users", async (req, res, next) => {
+  try {
+    const { body } = req;
+    const user = await UserController.create(body);
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 export default router;
