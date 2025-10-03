@@ -1,0 +1,30 @@
+{
+  "name": "bego-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/georgeif2212/JorgeInfante-BackendTest#readme",
+  "bugs": {
+    "url": "https://github.com/georgeif2212/JorgeInfante-BackendTest/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgeif2212/JorgeInfante-BackendTest.git"
+  },
+  "license": "ISC",
+  "author": "Jorge Infante",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon --exec 'node -r dotenv/config' ."
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
