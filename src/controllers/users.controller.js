@@ -4,6 +4,7 @@ import { CustomError } from "../utils/CustomError.js";
 import UserModel from "../models/user.model.js";
 import EnumsError from "../utils/EnumsError.js";
 import messageError from "../utils/ErrorCauseMessage.js";
+import { createPasswordHash } from "../utils/utils.js";
 
 export default class UsersController {
   static get(query = {}) {
@@ -11,7 +12,10 @@ export default class UsersController {
   }
 
   static async create(data) {
-    return UserModel.create(data);
+    return UserModel.create({
+      ...data,
+      password: await createPasswordHash(data.password),
+    });
   }
 
   static async getById(uid) {
