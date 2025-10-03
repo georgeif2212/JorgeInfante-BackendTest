@@ -8,12 +8,14 @@ const router = Router();
 
 router.get("/users", async (req, res, next) => {
   try {
-    const users = await UsersController.get({});
+    const { query } = req;
+    const users = await UsersController.get(query);
     res.status(200).json(users);
   } catch (error) {
     next(error);
   }
 });
+
 
 router.post("/users", async (req, res, next) => {
   try {
