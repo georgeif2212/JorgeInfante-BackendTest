@@ -1,7 +1,6 @@
 import { Router } from "express";
-
-// import { bodyUsersValidator } from "../../middlewares/body-users-validator.middleware.js";
-// import { emailUserValidator } from "../../middlewares/email-user-validator.middleware.js";
+import { registerSchema } from "../../validators/user.validator.js";
+import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import UsersController from "../../controllers/users.controller.js";
 
 const router = Router();
@@ -16,16 +15,19 @@ router.get("/users", async (req, res, next) => {
   }
 });
 
-
-router.post("/users", async (req, res, next) => {
-  try {
-    const { body } = req;
-    const user = await UsersController.create(body);
-    res.status(201).json(user);
-  } catch (error) {
-    next(error);
+router.post(
+  "/users",
+  validateInfoMiddleware(registerSchema),
+  async (req, res, next) => {
+    try {
+      const { body } = req;
+      const user = await UsersController.create(body);
+      res.status(201).json(user);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get("/users/:uid", async (req, res, next) => {
   try {
@@ -66,4 +68,4 @@ router.delete("/users/:uid", async (req, res, next) => {
   }
 });
 
-export default router
+export default router;
