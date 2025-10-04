@@ -27,4 +27,17 @@ export default class TrucksController {
 
     return TruckModel.create(data);
   }
+
+  static async getById(uid) {
+      const truck = await TruckModel.findById(uid);
+      if (!truck) {
+        CustomError.create({
+          name: "Truck not found",
+          cause: messageError.generatorUserIdError(uid),
+          message: `Truck with '${uid}' not found`,
+          code: EnumsError.NOT_FOUND_ERROR,
+        });
+      }
+      return truck;
+    }
 }
