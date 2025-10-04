@@ -1,4 +1,8 @@
 import { Router } from "express";
+import {
+  truckSchema,
+} from "../../validators/truck.validator.js";
+import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import TrucksController from "../../controllers/trucks.controller.js";
 
 const router = Router();
@@ -13,6 +17,18 @@ router.get("/trucks", async (req, res, next) => {
   }
 });
 
-
+router.post(
+  "/trucks",
+  validateInfoMiddleware(truckSchema),
+  async (req, res, next) => {
+    try {
+      const { body } = req;
+      const truck = await TrucksController.create(body);
+      res.status(201).json(truck);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
