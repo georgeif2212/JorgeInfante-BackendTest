@@ -1,6 +1,15 @@
+/**
+ * @file truck.validator.js
+ * @description Validaciones para la entidad Truck usando Joi.
+ *              Incluye validaciones para creación, actualización y validación de IDs.
+ */
+
 import Joi from "joi";
 import { uidSchema } from "./user.validator.js";
 
+/**
+ * Validación de ID de camión (tid) en formato MongoDB ObjectId.
+ */
 export const tidSchema = Joi.object({
   tid: Joi.string()
     .pattern(/^[0-9a-fA-F]{24}$/)
@@ -12,16 +21,23 @@ export const tidSchema = Joi.object({
     }),
 });
 
-
+/**
+ * Validación de datos para creación de un camión.
+ * Incluye año, color, placas y usuario asociado.
+ */
 export const truckSchema = Joi.object({
   year: Joi.string().required(),
   color: Joi.string().required(),
   plates: Joi.string().alphanum().min(6).max(10).required(),
   user: Joi.string().required(),
 }).keys({
-  user: uidSchema.extract("uid"),
+  user: uidSchema.extract("uid"), // Extrae la validación del uid del usuario
 });
 
+/**
+ * Validación de datos para actualización de un camión.
+ * Todos los campos son opcionales, pero se requiere al menos uno.
+ */
 export const updateTruckSchema = Joi.object({
   user: uidSchema.extract("uid").optional(),
   year: Joi.string().trim().messages({
