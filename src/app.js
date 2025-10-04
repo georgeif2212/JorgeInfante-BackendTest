@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { __dirname } from "./utils/utils.js";
 import usersRouter from "./routers/api/users.router.js";
+import authRouter from "./routers/api/auth.router.js";
 import { errorHandlerMiddleware } from "./middlewares/error-handler.middleware.js";
 
 const app = express();
@@ -15,7 +16,7 @@ app.get("/", (req, res) => {
   res.send("Server funcionando ");
 });
 
-app.use("/api", usersRouter);
+app.use("/api", usersRouter, authRouter);
 
 // ! Middleware de error
 app.use(errorHandlerMiddleware);
