@@ -9,16 +9,7 @@ import { createPasswordHash } from "../utils/utils.js";
 export default class AuthController {
   static async login(data) {
     const { email, password } = data;
-    console.log(email, password);
-    if (!email || !password) {
-      CustomError.create({
-        name: "Invalid user data",
-        cause: messageError.generatorUserLoginError(data),
-        message: `"There must be an email and password"`,
-        code: EnumsError.BAD_REQUEST_ERROR,
-      });
-    }
-
+    
     const user = await UsersController.get({ email: email });
     if (user.length === 0) {
       CustomError.create({
@@ -42,18 +33,7 @@ export default class AuthController {
 
   static async register(data) {
     const { email } = data;
-    const requiredFields = ["name", "email", "password"];
-    const missingFields = requiredFields.filter((field) => !data[field]);
-
-    if (missingFields.length > 0) {
-      CustomError.create({
-        name: "Invalid user data",
-        cause: messageError.generatorUserMissingFields(missingFields),
-        message: `Campos necesarios`,
-        code: EnumsError.BAD_REQUEST_ERROR,
-      });
-    }
-
+    
     const user = await UsersController.get({ email: email });
 
     if (user.length > 0) {
