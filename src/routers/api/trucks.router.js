@@ -1,3 +1,9 @@
+/**
+ * @file trucks.router.js
+ * @description Rutas para la gestión de camiones (CRUD) usando Express.
+ *              Incluye validación de datos con Joi y manejo de errores.
+ */
+
 import { Router } from "express";
 import {
   truckSchema,
@@ -9,6 +15,10 @@ import TrucksController from "../../controllers/trucks.controller.js";
 
 const router = Router();
 
+/**
+ * GET /trucks
+ * @description Obtiene todos los camiones. Soporta query params para filtrado.
+ */
 router.get("/trucks", async (req, res, next) => {
   try {
     const { query } = req;
@@ -19,6 +29,10 @@ router.get("/trucks", async (req, res, next) => {
   }
 });
 
+/**
+ * POST /trucks
+ * @description Crea un nuevo camión. Valida los datos del body con truckSchema.
+ */
 router.post(
   "/trucks",
   validateInfoMiddleware(truckSchema),
@@ -33,6 +47,10 @@ router.post(
   }
 );
 
+/**
+ * GET /trucks/:tid
+ * @description Obtiene un camión por su ID (tid). Valida params con tidSchema.
+ */
 router.get(
   "/trucks/:tid",
   validateInfoMiddleware(tidSchema, "params"),
@@ -49,6 +67,10 @@ router.get(
   }
 );
 
+/**
+ * PUT /trucks/:tid
+ * @description Actualiza un camión existente. Valida params y body con schemas correspondientes.
+ */
 router.put(
   "/trucks/:tid",
   validateInfoMiddleware(tidSchema, "params"),
@@ -59,9 +81,7 @@ router.put(
         body,
         params: { tid },
       } = req;
-
       const updatedTruck = await TrucksController.updateById(tid, body);
-
       res.status(200).json(updatedTruck);
     } catch (error) {
       next(error);
@@ -69,6 +89,10 @@ router.put(
   }
 );
 
+/**
+ * DELETE /trucks/:tid
+ * @description Elimina un camión por su ID. Valida params con tidSchema.
+ */
 router.delete(
   "/trucks/:tid",
   validateInfoMiddleware(tidSchema, "params"),
