@@ -40,5 +40,34 @@ export default class AuthController {
     return user;
   }
 
+  static async register(data) {
+    const { email } = data;
+    const requiredFields = ["name", "email", "password"];
+    const missingFields = requiredFields.filter((field) => !data[field]);
 
+    if (missingFields.length > 0) {
+      CustomError.create({
+        name: "Invalid user data",
+        cause: messageError.generatorUserMissingFields(missingFields),
+        message: `Campos necesarios`,
+        code: EnumsError.BAD_REQUEST_ERROR,
+      });
+    }
+
+    const user = await UsersController.get({ email: email });
+
+    if (user.length > 0) {
+      CustomError.create({
+        name: "Invalid user data",
+        cause: messageError.generatorUserAlreadyExistsError(data),
+        message: `User already exists`,
+        code: EnumsError.CONFLICT,
+      });
+    }
+
+    return UserModel.create({
+      ...data,
+      password: await createPasswordHash(data.password),
+    });
+  }
 }
