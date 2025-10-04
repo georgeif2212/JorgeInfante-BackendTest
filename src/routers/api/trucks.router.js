@@ -69,4 +69,20 @@ router.put(
   }
 );
 
+router.delete(
+  "/trucks/:tid",
+  validateInfoMiddleware(tidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { tid },
+      } = req;
+      await TrucksController.deleteById(tid);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;
