@@ -20,6 +20,10 @@ const messageError = {
   generatorUserMissingFields: (data) => {
     return `Data missing: ${data}`;
   },
+
+  generatorTruckAlreadyExistsError: (data) => {
+    return `The truck with the plates: ${data.plates} already exists`;
+  },
 };
 
 export default messageError;
