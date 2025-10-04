@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerSchema } from "../../validators/user.validator.js";
+import { registerSchema, uidSchema } from "../../validators/user.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import UsersController from "../../controllers/users.controller.js";
 
@@ -29,17 +29,21 @@ router.post(
   }
 );
 
-router.get("/users/:uid", async (req, res, next) => {
-  try {
-    const {
-      params: { uid },
-    } = req;
-    const user = await UsersController.getById(uid);
-    res.status(200).json(user);
-  } catch (error) {
-    next(error);
+router.get(
+  "/users/:uid",
+  validateInfoMiddleware(uidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { uid },
+      } = req;
+      const user = await UsersController.getById(uid);
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.put("/users/:uid", async (req, res, next) => {
   try {
