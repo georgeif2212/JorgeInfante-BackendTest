@@ -2,8 +2,8 @@ import { Router } from "express";
 import {
   truckSchema,
   updateTruckSchema,
+  tidSchema,
 } from "../../validators/truck.validator.js";
-import { uidSchema } from "../../validators/user.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import TrucksController from "../../controllers/trucks.controller.js";
 
@@ -35,7 +35,7 @@ router.post(
 
 router.get(
   "/trucks/:tid",
-  validateInfoMiddleware(uidSchema, "params"),
+  validateInfoMiddleware(tidSchema, "params"),
   async (req, res, next) => {
     try {
       const {
@@ -51,7 +51,7 @@ router.get(
 
 router.put(
   "/trucks/:tid",
-  validateInfoMiddleware(uidSchema, "params"),
+  validateInfoMiddleware(tidSchema, "params"),
   validateInfoMiddleware(updateTruckSchema),
   async (req, res, next) => {
     try {

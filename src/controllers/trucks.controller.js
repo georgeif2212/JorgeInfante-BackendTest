@@ -28,20 +28,20 @@ export default class TrucksController {
     return TruckModel.create(data);
   }
 
-  static async getById(uid) {
-    const truck = await TruckModel.findById(uid);
+  static async getById(tid) {
+    const truck = await TruckModel.findById(tid);
     if (!truck) {
       CustomError.create({
         name: "Truck not found",
-        cause: messageError.generatorUserIdError(uid),
-        message: `Truck with '${uid}' not found`,
+        cause: messageError.generatorUserIdError(tid),
+        message: `Truck with '${tid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
     }
     return truck;
   }
 
-  static async updateById(uid, data) {
+  static async updateById(tid, data) {
     const { plates, user } = data;
 
     const truck = await TrucksController.get({ plates: plates });
@@ -56,7 +56,7 @@ export default class TrucksController {
 
     if (user) await UsersController.getById(user);
 
-    const updatedTruck = await TruckModel.findByIdAndUpdate(uid, data, {
+    const updatedTruck = await TruckModel.findByIdAndUpdate(tid, data, {
       new: true,
       runValidators: true,
     });
@@ -64,8 +64,8 @@ export default class TrucksController {
     if (!updatedTruck) {
       CustomError.create({
         name: "Truck not found",
-        cause: messageError.generatorUserIdError(uid),
-        message: `Truck with '${uid}' not found`,
+        cause: messageError.generatorUserIdError(tid),
+        message: `Truck with '${tid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
     }
