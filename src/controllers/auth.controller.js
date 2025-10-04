@@ -7,7 +7,6 @@ import UserModel from "../models/user.model.js";
 import { createPasswordHash } from "../utils/utils.js";
 
 export default class AuthController {
-  
   static async login(data) {
     const { email, password } = data;
     console.log(email, password);
@@ -21,8 +20,7 @@ export default class AuthController {
     }
 
     const user = await UsersController.get({ email: email });
-
-    if (!user) {
+    if (user.length === 0) {
       CustomError.create({
         name: "Invalid user data",
         cause: messageError.generatorUserLoginDataError(),
