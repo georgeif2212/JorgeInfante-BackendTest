@@ -1,7 +1,6 @@
 import { Router } from "express";
-import {
-  truckSchema,
-} from "../../validators/truck.validator.js";
+import { truckSchema } from "../../validators/truck.validator.js";
+import { uidSchema } from "../../validators/user.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import TrucksController from "../../controllers/trucks.controller.js";
 
@@ -25,6 +24,22 @@ router.post(
       const { body } = req;
       const truck = await TrucksController.create(body);
       res.status(201).json(truck);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  "/trucks/:uid",
+  validateInfoMiddleware(uidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { uid },
+      } = req;
+      const truck = await TrucksController.getById(uid);
+      res.status(200).json(truck);
     } catch (error) {
       next(error);
     }
