@@ -12,6 +12,19 @@ export default class UsersController {
   }
 
   static async create(data) {
+    const { email } = data;
+
+    const user = await UsersController.get({ email: email });
+
+    if (user.length > 0) {
+      CustomError.create({
+        name: "Invalid user data",
+        cause: messageError.generatorUserAlreadyExistsError(data),
+        message: `User already exists`,
+        code: EnumsError.CONFLICT,
+      });
+    }
+
     return UserModel.create({
       ...data,
       password: await createPasswordHash(data.password),
