@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { truckSchema } from "../../validators/truck.validator.js";
+import {
+  truckSchema,
+  updateTruckSchema,
+} from "../../validators/truck.validator.js";
 import { uidSchema } from "../../validators/user.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import TrucksController from "../../controllers/trucks.controller.js";
@@ -40,6 +43,26 @@ router.get(
       } = req;
       const truck = await TrucksController.getById(uid);
       res.status(200).json(truck);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  "/trucks/:uid",
+  validateInfoMiddleware(uidSchema, "params"),
+  validateInfoMiddleware(updateTruckSchema),
+  async (req, res, next) => {
+    try {
+      const {
+        body,
+        params: { uid },
+      } = req;
+
+      const updatedTruck = await TrucksController.updateById(uid, body);
+
+      res.status(200).json(updatedTruck);
     } catch (error) {
       next(error);
     }
