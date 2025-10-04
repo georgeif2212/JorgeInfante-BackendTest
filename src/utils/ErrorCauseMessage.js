@@ -5,8 +5,8 @@ const messageError = {
 
   generatorUserLoginError: (data) => {
     return `Todos los campos son requeridos
-    - email: ${data.email}
-    - password: ${data.password}`;
+    - email
+    - password`;
   },
 
   generatorUserLoginDataError: () => {
