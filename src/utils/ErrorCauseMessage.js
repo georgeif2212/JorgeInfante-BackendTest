@@ -13,6 +13,13 @@ const messageError = {
     return `Invalid email or password`;
   },
 
+  generatorUserAlreadyExistsError: (data) => {
+    return `The user with the email: ${data.email} already exists`;
+  },
+
+  generatorUserMissingFields: (data) => {
+    return `Data missing: ${data}`;
+  },
 };
 
 export default messageError;
