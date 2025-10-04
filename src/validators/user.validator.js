@@ -21,3 +21,13 @@ export const uidSchema = Joi.object({
       "any.required": "User ID is required",
     }),
 });
+
+export const updateUserSchema = Joi.object({
+  name: Joi.string().min(2).max(100),
+  email: Joi.string().email(),
+  password: Joi.string().min(6),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided to update user",
+  });
