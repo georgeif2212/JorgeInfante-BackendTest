@@ -7,6 +7,7 @@ import UserModel from "../models/user.model.js";
 import { createPasswordHash } from "../utils/utils.js";
 
 export default class AuthController {
+  
   static async login(data) {
     const { email, password } = data;
     console.log(email, password);
