@@ -72,4 +72,17 @@ export default class TrucksController {
 
     return updatedTruck;
   }
+
+  static async deleteById(tid) {
+    const result = await TruckModel.findByIdAndDelete(tid);
+    if (!result) {
+      CustomError.create({
+        name: "Truck not found",
+        cause: messageError.generatorUserIdError(tid),
+        message: `Truck with '${tid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return result;
+  }
 }
