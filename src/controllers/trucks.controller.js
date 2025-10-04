@@ -29,15 +29,47 @@ export default class TrucksController {
   }
 
   static async getById(uid) {
-      const truck = await TruckModel.findById(uid);
-      if (!truck) {
-        CustomError.create({
-          name: "Truck not found",
-          cause: messageError.generatorUserIdError(uid),
-          message: `Truck with '${uid}' not found`,
-          code: EnumsError.NOT_FOUND_ERROR,
-        });
-      }
-      return truck;
+    const truck = await TruckModel.findById(uid);
+    if (!truck) {
+      CustomError.create({
+        name: "Truck not found",
+        cause: messageError.generatorUserIdError(uid),
+        message: `Truck with '${uid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
     }
+    return truck;
+  }
+
+  static async updateById(uid, data) {
+    const { plates, user } = data;
+
+    const truck = await TrucksController.get({ plates: plates });
+    if (truck.length > 0) {
+      CustomError.create({
+        name: "Invalid truck data",
+        cause: messageError.generatorTruckAlreadyExistsError(data),
+        message: `Truck already exists`,
+        code: EnumsError.CONFLICT,
+      });
+    }
+
+    if (user) await UsersController.getById(user);
+
+    const updatedTruck = await TruckModel.findByIdAndUpdate(uid, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedTruck) {
+      CustomError.create({
+        name: "Truck not found",
+        cause: messageError.generatorUserIdError(uid),
+        message: `Truck with '${uid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+
+    return updatedTruck;
+  }
 }
