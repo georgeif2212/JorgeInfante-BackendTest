@@ -34,14 +34,14 @@ router.post(
 );
 
 router.get(
-  "/trucks/:uid",
+  "/trucks/:tid",
   validateInfoMiddleware(uidSchema, "params"),
   async (req, res, next) => {
     try {
       const {
-        params: { uid },
+        params: { tid },
       } = req;
-      const truck = await TrucksController.getById(uid);
+      const truck = await TrucksController.getById(tid);
       res.status(200).json(truck);
     } catch (error) {
       next(error);
@@ -50,17 +50,17 @@ router.get(
 );
 
 router.put(
-  "/trucks/:uid",
+  "/trucks/:tid",
   validateInfoMiddleware(uidSchema, "params"),
   validateInfoMiddleware(updateTruckSchema),
   async (req, res, next) => {
     try {
       const {
         body,
-        params: { uid },
+        params: { tid },
       } = req;
 
-      const updatedTruck = await TrucksController.updateById(uid, body);
+      const updatedTruck = await TrucksController.updateById(tid, body);
 
       res.status(200).json(updatedTruck);
     } catch (error) {
