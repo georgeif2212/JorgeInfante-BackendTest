@@ -77,8 +77,8 @@ router.delete(
       const {
         params: { tid },
       } = req;
-      await TrucksController.deleteById(tid);
-      res.status(204).end();
+      const deletedTruck = await TrucksController.deleteById(tid);
+      res.status(200).json(deletedTruck);
     } catch (error) {
       next(error);
     }
