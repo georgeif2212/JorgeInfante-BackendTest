@@ -69,16 +69,20 @@ router.put(
   }
 );
 
-router.delete("/users/:uid", async (req, res, next) => {
-  try {
-    const {
-      params: { uid },
-    } = req;
-    await UsersController.deleteById(uid);
-    res.status(204).end();
-  } catch (error) {
-    next(error);
+router.delete(
+  "/users/:uid",
+  validateInfoMiddleware(uidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { uid },
+      } = req;
+      await UsersController.deleteById(uid);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 export default router;
