@@ -50,4 +50,8 @@ const TruckSchema = new Schema(
   }
 );
 
+TruckSchema.pre("find", function () {
+  this.populate("user");
+});
+
 export default model("Truck", TruckSchema);
