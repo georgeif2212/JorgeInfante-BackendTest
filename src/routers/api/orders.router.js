@@ -117,4 +117,30 @@ router.put(
   }
 );
 
+/**
+ * DELETE /orders/:oid
+ * @description Elimina una orden existente de la base de datos.
+ * Valida el parámetro `oid` con `oidSchema`.
+ *
+ * @param {string} req.params.oid - ID de la orden (MongoDB ObjectId).
+ * @returns {Object} 200 - Orden eliminada.
+ * @throws 400 - Si el parámetro no cumple con el esquema de validación.
+ * @throws 404 - Si no existe una orden con el ID especificado.
+ */
+router.delete(
+  "/orders/:oid",
+  validateInfoMiddleware(oidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { oid },
+      } = req;
+      const deletedOrder = await OrdersController.deleteById(oid);
+      res.status(200).json(deletedOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;
