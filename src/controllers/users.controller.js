@@ -21,6 +21,10 @@ export default class UsersController {
     return UserModel.find(query);
   }
 
+  static getByEmail(email) {
+    return UserModel.findOne({ email });
+  }
+
   /**
    * Crear un nuevo usuario.
    * Valida que no exista un usuario con el mismo email y encripta la contraseña.
@@ -33,9 +37,9 @@ export default class UsersController {
   static async create(data) {
     const { email } = data;
 
-    const user = await UsersController.get({ email: email });
+    const user = await UsersController.getByEmail(email);
 
-    if (user.length > 0) {
+    if (user) {
       CustomError.create({
         name: "Invalid user data",
         cause: messageError.generatorUserAlreadyExistsError(data),
