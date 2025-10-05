@@ -5,6 +5,7 @@ import usersRouter from "./routers/api/users.router.js";
 import authRouter from "./routers/api/auth.router.js";
 import trucksRouter from "./routers/api/trucks.router.js";
 import locationsRouter from "./routers/api/locations.router.js";
+import ordersRouter from "./routers/api/orders.router.js";
 
 import { errorHandlerMiddleware } from "./middlewares/error-handler.middleware.js";
 
@@ -19,7 +20,14 @@ app.get("/", (req, res) => {
   res.send("Server funcionando ");
 });
 
-app.use("/api", usersRouter, authRouter, trucksRouter, locationsRouter);
+app.use(
+  "/api",
+  usersRouter,
+  authRouter,
+  trucksRouter,
+  locationsRouter,
+  ordersRouter
+);
 
 // ! Middleware de error
 app.use(errorHandlerMiddleware);
