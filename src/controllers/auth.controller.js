@@ -9,9 +9,10 @@ import { createPasswordHash } from "../utils/utils.js";
 export default class AuthController {
   static async login(data) {
     const { email, password } = data;
-    
-    const user = await UsersController.get({ email: email });
-    if (user.length === 0) {
+
+    const user = await UsersController.getByEmail(email);
+
+    if (!user) {
       CustomError.create({
         name: "Invalid user data",
         cause: messageError.generatorUserLoginDataError(),
@@ -20,7 +21,7 @@ export default class AuthController {
       });
     }
 
-    if (!isValidPassword(password, user[0].password)) {
+    if (!isValidPassword(password, user.password)) {
       CustomError.create({
         name: "Invalid user data",
         cause: messageError.generatorUserLoginDataError(),
@@ -33,10 +34,10 @@ export default class AuthController {
 
   static async register(data) {
     const { email } = data;
-    
-    const user = await UsersController.get({ email: email });
 
-    if (user.length > 0) {
+    const user = await UsersController.getByEmail(email);
+
+    if (user) {
       CustomError.create({
         name: "Invalid user data",
         cause: messageError.generatorUserAlreadyExistsError(data),
