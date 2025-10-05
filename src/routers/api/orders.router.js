@@ -58,6 +58,32 @@ router.post(
 );
 
 /**
+ * GET /orders/:oid
+ * @description Busca una orden en la base de datos a partir de su identificador único.
+ * Valida los parámetros con `oidSchema`.
+ *
+ * @param {string} req.params.oid - ID de la orden en formato MongoDB ObjectId.
+ * @returns {Object} 200 - Orden encontrada.
+ * @throws 400 - Si el parámetro no cumple con el esquema de validación.
+ * @throws 404 - Si no existe una orden con el ID especificado.
+ */
+router.get(
+  "/orders/:oid",
+  validateInfoMiddleware(oidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { oid },
+      } = req;
+      const order = await OrdersController.getById(oid);
+      res.status(200).json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
  * PUT /orders/:oid
  * @description Actualiza una orden existente en la base de datos.
  * Valida el parámetro `oid` con `oidSchema` y el cuerpo de la petición con `updateOrderSchema`.
