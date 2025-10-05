@@ -20,6 +20,10 @@ export default class LocationsController {
     return LocationModel.find(query);
   }
 
+  static getByPlaceId(place_id) {
+    return LocationModel.findOne({ place_id });
+  }
+
   /**
    * Crear una nueva ubicación (Location).
    * Valida que el place_id sea único y obtiene los detalles desde Google Places.
@@ -32,7 +36,7 @@ export default class LocationsController {
   static async create(data) {
     const { place_id } = data;
 
-    const existing = await LocationModel.findOne({ place_id });
+    const existing = await LocationsController.getByPlaceId(place_id);
     if (existing)
       CustomError.create({
         name: "Invalid location data",
@@ -85,8 +89,8 @@ export default class LocationsController {
   static async updateById(lid, data) {
     const { place_id } = data;
 
-    const location = await LocationsController.get({ place_id: place_id });
-    if (location.length > 0) {
+    const location = await LocationsController.getByPlaceId(place_id);
+    if (location) {
       CustomError.create({
         name: "Invalid location data",
         cause: messageError.generatorLocationAlreadyExistsError(data),
