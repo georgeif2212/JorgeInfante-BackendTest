@@ -7,7 +7,7 @@ import { lidSchema as locationIdSchema } from "./location.validator.js"; // idem
 export const orderSchema = Joi.object({
   user: uidSchema.extract("uid").required(), // user ObjectId
   truck: truckIdSchema.extract("tid").required(), // truck ObjectId
-  status: Joi.string().valid("created", "in transit", "completed").required(),
+  status: Joi.string().valid("created", "in transit", "completed"),
   pickup: locationIdSchema.extract("lid").required(), // origin location
   dropoff: locationIdSchema.extract("lid").required(), // destination location
 });
