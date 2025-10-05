@@ -107,4 +107,30 @@ router.put(
   }
 );
 
+/**
+ * DELETE /locations/:lid
+ * @description Elimina una ubicación existente de la base de datos.
+ * Valida el parámetro `lid` con `lidSchema`.
+ *
+ * @param {string} req.params.lid - ID de la ubicación (MongoDB ObjectId).
+ * @returns {Object} 200 - Ubicación eliminada.
+ * @throws 400 - Si el parámetro no cumple con el esquema de validación.
+ * @throws 404 - Si no existe la ubicación con el ID especificado.
+ */
+router.delete(
+  "/locations/:lid",
+  validateInfoMiddleware(lidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { lid },
+      } = req;
+      const deletedLocation = await LocationsController.deleteById(lid);
+      res.status(200).json(deletedLocation);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;
