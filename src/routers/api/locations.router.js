@@ -11,15 +11,19 @@ import {
   updateLocationSchema,
 } from "../../validators/location.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
+import { authMiddleware } from "../../middlewares/auth.middleware.js";
+
 import LocationsController from "../../controllers/locations.controller.js";
 
 const router = Router();
+
+router.use(authMiddleware);
 
 /**
  * GET /locations
  * @description Obtiene todas las ubicaciones. Soporta query params para filtrado.
  */
-router.get("/locations", async (req, res, next) => {
+router.get("", async (req, res, next) => {
   try {
     const { query } = req;
     const locations = await LocationsController.get(query);
@@ -40,7 +44,7 @@ router.get("/locations", async (req, res, next) => {
  * @throws 404 - Si Google Places no devuelve información válida
  */
 router.post(
-  "/locations",
+  "",
   validateInfoMiddleware(locationSchema),
   async (req, res, next) => {
     try {
@@ -63,7 +67,7 @@ router.post(
  * @throws 404 - Si no existe una ubicación con el ID especificado
  */
 router.get(
-  "/locations/:lid",
+  "/:lid",
   validateInfoMiddleware(lidSchema, "params"),
   async (req, res, next) => {
     try {
@@ -90,7 +94,7 @@ router.get(
  * @throws 409 - Si ya existe otra ubicación con el mismo place_id.
  */
 router.put(
-  "/locations/:lid",
+  "/:lid",
   validateInfoMiddleware(lidSchema, "params"),
   validateInfoMiddleware(updateLocationSchema),
   async (req, res, next) => {
@@ -118,7 +122,7 @@ router.put(
  * @throws 404 - Si no existe la ubicación con el ID especificado.
  */
 router.delete(
-  "/locations/:lid",
+  "/:lid",
   validateInfoMiddleware(lidSchema, "params"),
   async (req, res, next) => {
     try {
