@@ -8,6 +8,7 @@ import { Router } from "express";
 import {
   lidSchema,
   locationSchema,
+  updateLocationSchema,
 } from "../../validators/location.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import LocationsController from "../../controllers/locations.controller.js";
@@ -71,6 +72,35 @@ router.get(
       } = req;
       const location = await LocationsController.getById(lid);
       res.status(200).json(location);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+/**
+ * PUT /locations/:lid
+ * @description Actualiza una ubicación existente en la base de datos.
+ * Valida el parámetro `lid` con `lidSchema` y el cuerpo de la petición con `updateLocationSchema`.
+ *
+ * @param {string} req.params.lid - ID de la ubicación (MongoDB ObjectId).
+ * @param {string} req.body.place_id - ID del lugar en Google Maps.
+ * @returns {Object} 200 - Ubicación actualizada.
+ * @throws 400 - Si los datos no cumplen con los esquemas de validación.
+ * @throws 404 - Si no existe la ubicación con el ID especificado.
+ * @throws 409 - Si ya existe otra ubicación con el mismo place_id.
+ */
+router.put(
+  "/locations/:lid",
+  validateInfoMiddleware(lidSchema, "params"),
+  validateInfoMiddleware(updateLocationSchema),
+  async (req, res, next) => {
+    try {
+      const {
+        body,
+        params: { lid },
+      } = req;
+      const updatedLocation = await LocationsController.updateById(lid, body);
+      res.status(200).json(updatedLocation);
     } catch (error) {
       next(error);
     }
