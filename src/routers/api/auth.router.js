@@ -10,7 +10,7 @@ import {
 const router = Router();
 
 router.post(
-  "/auth/login",
+  "/login",
   validateInfoMiddleware(loginSchema),
   async (req, res, next) => {
     try {
@@ -28,7 +28,7 @@ router.post(
 );
 
 router.post(
-  "/auth/register",
+  "/register",
   validateInfoMiddleware(registerSchema),
   async (req, res, next) => {
     try {
