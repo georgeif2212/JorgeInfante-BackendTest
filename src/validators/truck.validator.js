@@ -29,11 +29,7 @@ export const truckSchema = Joi.object({
   year: Joi.string().required(),
   color: Joi.string().required(),
   plates: Joi.string().alphanum().min(6).max(10).required(),
-  user: Joi.string().required(),
-}).keys({
-  user: uidSchema.extract("uid"), // Extrae la validación del uid del usuario
 });
-
 /**
  * Validación de datos para actualización de un camión.
  * Todos los campos son opcionales, pero se requiere al menos uno.

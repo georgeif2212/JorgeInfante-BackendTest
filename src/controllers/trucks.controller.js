@@ -20,6 +20,9 @@ export default class TrucksController {
     return TruckModel.find(query);
   }
 
+  static getByPlates(plates) {
+    return TruckModel.findOne({ plates });
+  }
   /**
    * Crear un nuevo camión.
    * Valida que las placas sean únicas y que el usuario exista.
@@ -30,8 +33,8 @@ export default class TrucksController {
   static async create(data) {
     const { plates, user } = data;
 
-    const truck = await TrucksController.get({ plates: plates });
-    if (truck.length > 0) {
+    const truck = await TrucksController.getByPlates(plates);
+    if (truck) {
       CustomError.create({
         name: "Invalid truck data",
         cause: messageError.generatorTruckAlreadyExistsError(data),
@@ -75,8 +78,8 @@ export default class TrucksController {
   static async updateById(tid, data) {
     const { plates, user } = data;
 
-    const truck = await TrucksController.get({ plates: plates });
-    if (truck.length > 0) {
+    const truck = await TrucksController.getByPlates(plates);
+    if (truck) {
       CustomError.create({
         name: "Invalid truck data",
         cause: messageError.generatorTruckAlreadyExistsError(data),
