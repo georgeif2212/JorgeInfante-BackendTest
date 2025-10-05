@@ -26,3 +26,19 @@ export const lidSchema = Joi.object({
       "any.required": "Location ID is required",
     }),
 });
+
+/**
+ * Esquema de validación para actualización de una ubicación
+ * Es necesario un campo.
+ * Solo se requiere el place_id porque los demas campos se actualizan
+ * por la api de Google
+ */
+export const updateLocationSchema = Joi.object({
+  place_id: Joi.string().trim().messages({
+    "string.empty": "Place ID cannot be empty",
+  }),
+})
+  .min(1)
+  .messages({
+    "object.min": "At least one field must be provided to update the location",
+  });
