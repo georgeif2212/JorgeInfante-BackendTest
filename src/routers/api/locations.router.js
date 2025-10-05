@@ -52,7 +52,15 @@ router.post(
   }
 );
 
-
+/**
+ * GET /locations/:lid
+ * @description Busca una ubicación en la base de datos a partir de su identificador único.
+ * Valida los parámetros con `lidSchema`.
+ * @param {string} req.params.lid - ID de la ubicación en formato MongoDB ObjectId
+ * @returns {Object} 200 - Ubicación encontrada
+ * @throws 400 - Si el parámetro no cumple con el esquema de validación
+ * @throws 404 - Si no existe una ubicación con el ID especificado
+ */
 router.get(
   "/locations/:lid",
   validateInfoMiddleware(lidSchema, "params"),
