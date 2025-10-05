@@ -8,6 +8,7 @@ import { Router } from "express";
 
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import OrdersController from "../../controllers/orders.controller.js";
+import { orderSchema } from "../../validators/order.validator.js";
 
 const router = Router();
 
@@ -24,5 +25,32 @@ router.get("/orders", async (req, res, next) => {
     next(error);
   }
 });
+
+/**
+ * POST /orders
+ * @description Crea una nueva orden de transporte.
+ * Valida que los IDs de usuario, camión y ubicaciones existan y cumplan los esquemas de validación con `orderSchema`.
+ *
+ * @param {string} req.body.user - ID del usuario que crea la orden.
+ * @param {string} req.body.truck - ID del camión asignado.
+ * @param {string} req.body.pickup - ID de la ubicación de recogida.
+ * @param {string} req.body.dropoff - ID de la ubicación de entrega.
+ * @returns {Object} 201 - Orden creada con todos los datos relacionados.
+ * @throws 400 - Si los datos no cumplen con los esquemas de validación.
+ * @throws 404 - Si alguno de los IDs relacionados (usuario, camión, pickup, dropoff) no existe.
+ */
+router.post(
+  "/orders",
+  validateInfoMiddleware(orderSchema),
+  async (req, res, next) => {
+    try {
+      const { body } = req;
+      const order = await OrdersController.create(body);
+      res.status(201).json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default router;
