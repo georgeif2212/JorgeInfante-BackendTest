@@ -6,6 +6,7 @@
 
 import { Router } from "express";
 
+import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import OrdersController from "../../controllers/orders.controller.js";
 import {
@@ -17,11 +18,12 @@ import {
 
 const router = Router();
 
+router.use(authMiddleware);
 /**
  * GET /orders
  * @description Obtiene todas las ubicaciones. Soporta query params para filtrado.
  */
-router.get("/orders", async (req, res, next) => {
+router.get("", async (req, res, next) => {
   try {
     const { query } = req;
     const orders = await OrdersController.list(query);
@@ -36,7 +38,7 @@ router.get("/orders", async (req, res, next) => {
  * @description Crea una nueva orden de transporte.
  * Valida que los IDs de usuario, camión y ubicaciones existan y cumplan los esquemas de validación con `orderSchema`.
  *
- * @param {string} req.body.user - ID del usuario que crea la orden.
+ * @param {string} req.user._id - ID del usuario que crea la orden.
  * @param {string} req.body.truck - ID del camión asignado.
  * @param {string} req.body.pickup - ID de la ubicación de recogida.
  * @param {string} req.body.dropoff - ID de la ubicación de entrega.
@@ -44,19 +46,19 @@ router.get("/orders", async (req, res, next) => {
  * @throws 400 - Si los datos no cumplen con los esquemas de validación.
  * @throws 404 - Si alguno de los IDs relacionados (usuario, camión, pickup, dropoff) no existe.
  */
-router.post(
-  "/orders",
-  validateInfoMiddleware(orderSchema),
-  async (req, res, next) => {
-    try {
-      const { body } = req;
-      const order = await OrdersController.create(body);
-      res.status(201).json(order);
-    } catch (error) {
-      next(error);
-    }
+router.post("", validateInfoMiddleware(orderSchema), async (req, res, next) => {
+  try {
+    const { body } = req;
+    console.log(req.user._id);
+    const order = await OrdersController.create({
+      ...body,
+      user: req.user._id,
+    });
+    res.status(201).json(order);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 /**
  * GET /orders/:oid
@@ -69,7 +71,7 @@ router.post(
  * @throws 404 - Si no existe una orden con el ID especificado.
  */
 router.get(
-  "/orders/:oid",
+  "/:oid",
   validateInfoMiddleware(oidSchema, "params"),
   async (req, res, next) => {
     try {
@@ -90,7 +92,7 @@ router.get(
  * Valida el parámetro `oid` con `oidSchema` y el cuerpo de la petición con `updateOrderSchema`.
  *
  * @param {string} req.params.oid - ID de la orden (MongoDB ObjectId).
- * @param {string} req.body.user - ID del usuario asociado a la orden.
+ * @param {string} req.user._id - ID del usuario asociado a la orden.
  * @param {string} req.body.truck - ID del camión asociado a la orden.
  * @param {string} req.body.status - Estado de la orden.
  * @param {string} req.body.pickup - ID de la ubicación de recogida.
@@ -101,7 +103,7 @@ router.get(
  * @throws 404 - Si no existe la orden con el ID especificado.
  */
 router.put(
-  "/orders/:oid",
+  "/:oid",
   validateInfoMiddleware(oidSchema, "params"),
   validateInfoMiddleware(updateOrderSchema),
   async (req, res, next) => {
@@ -110,7 +112,10 @@ router.put(
         body,
         params: { oid },
       } = req;
-      const updatedOrder = await OrdersController.updateById(oid, body);
+      const updatedOrder = await OrdersController.updateById(oid, {
+        ...body,
+        user: req.user._id,
+      });
       res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);
@@ -130,7 +135,7 @@ router.put(
  * @throws 404 - Si no existe una orden con el ID especificado.
  */
 router.patch(
-  "/orders/:oid/status",
+  "/:oid/status",
   validateInfoMiddleware(oidSchema, "params"),
   validateInfoMiddleware(updateStatusSchema),
   async (req, res, next) => {
@@ -161,7 +166,7 @@ router.patch(
  * @throws 404 - Si no existe una orden con el ID especificado.
  */
 router.delete(
-  "/orders/:oid",
+  ":oid",
   validateInfoMiddleware(oidSchema, "params"),
   async (req, res, next) => {
     try {
