@@ -188,4 +188,24 @@ export default class OrdersController {
 
     return updatedOrder;
   }
+
+  /**
+   * Eliminar una orden por su ID.
+   *
+   * @param {string} oid - ID único de la orden (MongoDB ObjectId).
+   * @returns {Promise<Object>} Orden eliminada de la base de datos.
+   * @throws CustomError Si no existe una orden con el ID especificado.
+   */
+  static async deleteById(oid) {
+    const result = await OrderModel.findByIdAndDelete(oid);
+    if (!result) {
+      CustomError.create({
+        name: "Order not found",
+        cause: messageError.generatorIdError(oid),
+        message: `Order with '${oid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return result;
+  }
 }
