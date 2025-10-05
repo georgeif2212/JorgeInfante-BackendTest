@@ -5,7 +5,10 @@
  */
 
 import { Router } from "express";
-import { locationSchema } from "../../validators/location.validator.js";
+import {
+  lidSchema,
+  locationSchema,
+} from "../../validators/location.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import LocationsController from "../../controllers/locations.controller.js";
 
@@ -43,6 +46,23 @@ router.post(
       const { body } = req;
       const location = await LocationsController.create(body);
       res.status(201).json(location);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+router.get(
+  "/locations/:lid",
+  validateInfoMiddleware(lidSchema, "params"),
+  async (req, res, next) => {
+    try {
+      const {
+        params: { lid },
+      } = req;
+      const location = await LocationsController.getById(lid);
+      res.status(200).json(location);
     } catch (error) {
       next(error);
     }
