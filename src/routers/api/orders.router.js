@@ -19,7 +19,7 @@ const router = Router();
 router.get("/orders", async (req, res, next) => {
   try {
     const { query } = req;
-    const orders = await OrdersController.get(query);
+    const orders = await OrdersController.list(query);
     res.status(200).json(orders);
   } catch (error) {
     next(error);
