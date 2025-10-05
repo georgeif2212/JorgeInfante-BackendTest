@@ -12,6 +12,7 @@ import {
   oidSchema,
   orderSchema,
   updateOrderSchema,
+  updateStatusSchema,
 } from "../../validators/order.validator.js";
 
 const router = Router();
@@ -110,6 +111,38 @@ router.put(
         params: { oid },
       } = req;
       const updatedOrder = await OrdersController.updateById(oid, body);
+      res.status(200).json(updatedOrder);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * PATCH /orders/:oid/status
+ * @description Actualiza únicamente el estado (`status`) de una orden en la base de datos.
+ * Valida el parámetro `oid` con `oidSchema` y el cuerpo de la petición con `updateStatusSchema`.
+ *
+ * @param {string} req.params.oid - ID de la orden (MongoDB ObjectId).
+ * @param {string} req.body.status - Nuevo estado de la orden (ej. "created", "in transit", "completed").
+ * @returns {Object} 200 - Orden actualizada con el nuevo estado.
+ * @throws 400 - Si los datos no cumplen con los esquemas de validación.
+ * @throws 404 - Si no existe una orden con el ID especificado.
+ */
+router.patch(
+  "/orders/:oid/status",
+  validateInfoMiddleware(oidSchema, "params"),
+  validateInfoMiddleware(updateStatusSchema),
+  async (req, res, next) => {
+    try {
+      const {
+        body,
+        params: { oid },
+      } = req;
+
+      const updatedOrder = await OrdersController.updateById(oid, {
+        status: body.status,
+      });
       res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);
