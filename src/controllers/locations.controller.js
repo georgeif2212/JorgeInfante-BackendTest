@@ -71,4 +71,52 @@ export default class LocationsController {
     }
     return location;
   }
+
+  /**
+   * Actualizar una ubicación por su ID.
+   * Valida que no exista otra ubicación con el mismo place_id
+   * y obtiene los datos actualizados desde Google Places.
+   *
+   * @param {string} lid - ID de la ubicación a actualizar (MongoDB ObjectId).
+   * @param {string} data.place_id - ID del lugar en Google Maps.
+   * @returns {Promise<Object>} Ubicación actualizada.
+   * @throws CustomError Si la ubicación no existe o si los datos son inválidos (ej. place_id duplicado).
+   */
+  static async updateById(lid, data) {
+    const { place_id } = data;
+
+    const location = await LocationsController.get({ place_id: place_id });
+    if (location.length > 0) {
+      CustomError.create({
+        name: "Invalid location data",
+        cause: messageError.generatorLocationAlreadyExistsError(data),
+        message: `Location already exists`,
+        code: EnumsError.CONFLICT,
+      });
+    }
+
+    const locationDataFromGoogle = await GooglePlacesService.getPlaceDetails(
+      place_id
+    );
+
+    const updatedLocation = await LocationModel.findByIdAndUpdate(
+      lid,
+      { place_id, ...locationDataFromGoogle },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedLocation) {
+      CustomError.create({
+        name: "Location not found",
+        cause: messageError.generatorUserIdError(lid),
+        message: `Location with '${lid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+
+    return updatedLocation;
+  }
 }
