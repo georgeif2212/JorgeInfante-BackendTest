@@ -5,10 +5,10 @@
  */
 
 import OrderModel from "../models/order.model.js";
-import LocationsController from "./locations.controller.js";
-import TrucksController from "./trucks.controller.js";
-import UsersController from "./users.controller.js";
-
+import { checkRelations } from "../validators/relations.validator.js";
+import { CustomError } from "../utils/CustomError.js";
+import EnumsError from "../utils/EnumsError.js";
+import messageError from "../utils/ErrorCauseMessage.js";
 export default class OrdersController {
   /**
    * Obtener todas las ordenes que cumplen con un query opcional.
@@ -33,15 +33,6 @@ export default class OrdersController {
    */
   static async create(data) {
     const { user, truck, pickup, dropoff } = data;
-
-    const checkRelations = async (userId, truckId, originId, destinationId) => {
-      await Promise.all([
-        UsersController.getById(userId),
-        TrucksController.getById(truckId),
-        LocationsController.getById(originId),
-        LocationsController.getById(destinationId),
-      ]);
-    };
 
     await checkRelations(user, truck, pickup, dropoff);
 
@@ -141,5 +132,42 @@ export default class OrdersController {
 
     const results = await OrderModel.aggregate(pipeline);
     return results;
+  }
+
+  /**
+   * Actualizar una orden por su ID.
+   * Valida que existan las relaciones (usuario, camión, ubicaciones) antes de actualizar.
+   *
+   * @param {string} oid - ID de la orden a actualizar (MongoDB ObjectId).
+   * @param {Object} data - Datos de la orden a actualizar.
+   * @param {string} data.user - ID del usuario asociado.
+   * @param {string} data.truck - ID del camión asociado.
+   * @param {string} data.status - Estado de la orden.
+   * @param {string} data.pickup - ID de la ubicación de recogida.
+   * @param {string} data.dropoff - ID de la ubicación de entrega.
+   *
+   * @returns {Promise<Object>} Orden actualizada.
+   * @throws CustomError Si la orden no existe o si alguna relación es inválida.
+   */
+  static async updateById(oid, data) {
+    const { user, truck, status, pickup, dropoff } = data;
+
+    await checkRelations(user, truck, pickup, dropoff);
+
+    const updatedOrder = await OrderModel.findByIdAndUpdate(oid, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedOrder) {
+      CustomError.create({
+        name: "Order not found",
+        cause: messageError.generatorIdError(oid),
+        message: `Order with '${oid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+
+    return updatedOrder;
   }
 }
