@@ -37,7 +37,7 @@ export default class GooglePlacesService {
     if (!result)
       CustomError.create({
         name: "Place Not Found",
-        cause: messageError.generatorUserIdError(place_id),
+        cause: messageError.generatorIdError(place_id),
         message: `The id doesn't match any location`,
         code: EnumsError.NOT_FOUND_ERROR,
       });

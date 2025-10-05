@@ -1,5 +1,5 @@
 const messageError = {
-  generatorUserIdError: (id) => {
+  generatorIdError: (id) => {
     return `The identifier must be valid - Received ID: ${id}`;
   },
 

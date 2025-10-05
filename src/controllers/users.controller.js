@@ -36,7 +36,7 @@ export default class UsersController {
     if (!user) {
       CustomError.create({
         name: "User not found",
-        cause: messageError.generatorUserIdError(uid),
+        cause: messageError.generatorIdError(uid),
         message: `User with '${uid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -53,7 +53,7 @@ export default class UsersController {
     if (!updatedUser) {
       CustomError.create({
         name: "User not found",
-        cause: messageError.generatorUserIdError(uid),
+        cause: messageError.generatorIdError(uid),
         message: `User with '${uid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -67,7 +67,7 @@ export default class UsersController {
     if (result.deletedCount === 0) {
       CustomError.create({
         name: "User not found",
-        cause: messageError.generatorUserIdError(uid),
+        cause: messageError.generatorIdError(uid),
         message: `User with '${uid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });

@@ -64,7 +64,7 @@ export default class LocationsController {
     if (!location) {
       CustomError.create({
         name: "Location not found",
-        cause: messageError.generatorUserIdError(lid),
+        cause: messageError.generatorIdError(lid),
         message: `Location with '${lid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -111,7 +111,7 @@ export default class LocationsController {
     if (!updatedLocation) {
       CustomError.create({
         name: "Location not found",
-        cause: messageError.generatorUserIdError(lid),
+        cause: messageError.generatorIdError(lid),
         message: `Location with '${lid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -132,7 +132,7 @@ export default class LocationsController {
     if (!result) {
       CustomError.create({
         name: "Location not found",
-        cause: messageError.generatorUserIdError(lid),
+        cause: messageError.generatorIdError(lid),
         message: `Location with '${lid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
