@@ -1,3 +1,9 @@
+/**
+ * @file GooglePlacesService.js
+ * @description Servicio para interactuar con la API de Google Places.
+ *              Permite obtener detalles de un lugar a partir de su place_id.
+ */
+
 import axios from "axios";
 import { CustomError } from "../utils/CustomError.js";
 import messageError from "../utils/ErrorCauseMessage.js";
@@ -7,6 +13,13 @@ import config from "../config/config.js";
 const GOOGLE_API_KEY = config.googleAK;
 
 export default class GooglePlacesService {
+  /**
+   * Obtiene los detalles de un lugar usando Google Places API.
+   * Valida que el place_id sea proporcionado y maneja errores si no se encuentra.
+   * @param {string} place_id - ID del lugar en Google Maps.
+   * @returns {Promise<Object>} Objeto con dirección, latitud y longitud del lugar.
+   * @throws CustomError si no se proporciona place_id o el lugar no se encuentra.
+   */
   static async getPlaceDetails(place_id) {
     if (!place_id)
       CustomError.create({
