@@ -20,11 +20,16 @@ export default class OrdersController {
   }
 
   /**
-   * Crear un nuevo camión.
-   * Valida que las placas sean únicas y que el usuario exista.
-   * @param {Object} data - Datos del camión a crear.
-   * @returns {Promise<Object>} Camión creado.
-   * @throws CustomError si ya existe un camión con las mismas placas o usuario inválido.
+   * Crear una nueva orden de transporte.
+   * Valida la existencia de los recursos relacionados: usuario, camión, ubicación de origen y destino.
+   *
+   * @param {Object} data - Datos de la orden.
+   * @param {string} data.user - ID del usuario que crea la orden.
+   * @param {string} data.truck - ID del camión asignado.
+   * @param {string} data.pickup - ID de la ubicación de recogida.
+   * @param {string} data.dropoff - ID de la ubicación de entrega.
+   * @returns {Promise<Object>} Orden creada en la base de datos.
+   * @throws CustomError Si alguno de los IDs relacionados no existe.
    */
   static async create(data) {
     const { user, truck, pickup, dropoff } = data;
@@ -37,7 +42,9 @@ export default class OrdersController {
         LocationsController.getById(destinationId),
       ]);
     };
+
     await checkRelations(user, truck, pickup, dropoff);
+
     return OrderModel.create(data);
   }
 }
