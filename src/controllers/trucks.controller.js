@@ -56,7 +56,7 @@ export default class TrucksController {
     if (!truck) {
       CustomError.create({
         name: "Truck not found",
-        cause: messageError.generatorUserIdError(tid),
+        cause: messageError.generatorIdError(tid),
         message: `Truck with '${tid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -95,7 +95,7 @@ export default class TrucksController {
     if (!updatedTruck) {
       CustomError.create({
         name: "Truck not found",
-        cause: messageError.generatorUserIdError(tid),
+        cause: messageError.generatorIdError(tid),
         message: `Truck with '${tid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
@@ -115,7 +115,7 @@ export default class TrucksController {
     if (!result) {
       CustomError.create({
         name: "Truck not found",
-        cause: messageError.generatorUserIdError(tid),
+        cause: messageError.generatorIdError(tid),
         message: `Truck with '${tid}' not found`,
         code: EnumsError.NOT_FOUND_ERROR,
       });
