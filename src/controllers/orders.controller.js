@@ -135,6 +135,24 @@ export default class OrdersController {
   }
 
   /**
+   * Obtener una orden por su ID.
+   * @param {string} oid - ID único de la orden (MongoDB ObjectId).
+   * @returns {Promise<Object>} Orden encontrada en la base de datos.
+   * @throws CustomError Si no existe una orden con el ID especificado.
+   */
+  static async getById(oid) {
+    const order = await OrderModel.findById(oid);
+    if (!order) {
+      CustomError.create({
+        name: "Order not found",
+        cause: messageError.generatorIdError(oid),
+        message: `Order with '${oid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return order;
+  }
+  /**
    * Actualizar una orden por su ID.
    * Valida que existan las relaciones (usuario, camión, ubicaciones) antes de actualizar.
    *
