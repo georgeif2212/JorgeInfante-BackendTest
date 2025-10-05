@@ -8,7 +8,11 @@ import { Router } from "express";
 
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import OrdersController from "../../controllers/orders.controller.js";
-import { orderSchema } from "../../validators/order.validator.js";
+import {
+  oidSchema,
+  orderSchema,
+  updateOrderSchema,
+} from "../../validators/order.validator.js";
 
 const router = Router();
 
@@ -47,6 +51,40 @@ router.post(
       const { body } = req;
       const order = await OrdersController.create(body);
       res.status(201).json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * PUT /orders/:oid
+ * @description Actualiza una orden existente en la base de datos.
+ * Valida el parámetro `oid` con `oidSchema` y el cuerpo de la petición con `updateOrderSchema`.
+ *
+ * @param {string} req.params.oid - ID de la orden (MongoDB ObjectId).
+ * @param {string} req.body.user - ID del usuario asociado a la orden.
+ * @param {string} req.body.truck - ID del camión asociado a la orden.
+ * @param {string} req.body.status - Estado de la orden.
+ * @param {string} req.body.pickup - ID de la ubicación de recogida.
+ * @param {string} req.body.dropoff - ID de la ubicación de entrega.
+ *
+ * @returns {Object} 200 - Orden actualizada.
+ * @throws 400 - Si los datos no cumplen con los esquemas de validación.
+ * @throws 404 - Si no existe la orden con el ID especificado.
+ */
+router.put(
+  "/orders/:oid",
+  validateInfoMiddleware(oidSchema, "params"),
+  validateInfoMiddleware(updateOrderSchema),
+  async (req, res, next) => {
+    try {
+      const {
+        body,
+        params: { oid },
+      } = req;
+      const updatedOrder = await OrdersController.updateById(oid, body);
+      res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);
     }
