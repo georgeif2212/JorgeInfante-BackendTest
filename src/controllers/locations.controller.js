@@ -52,4 +52,23 @@ export default class LocationsController {
 
     return location;
   }
+
+  /**
+   * Obtener una ubicación por su ID.
+   * @param {string} lid - ID único de la ubicación (MongoDB ObjectId).
+   * @returns {Promise<Object>} Ubicación encontrada en la base de datos.
+   * @throws CustomError Si no existe una ubicación con el ID especificado.
+   */
+  static async getById(lid) {
+    const location = await LocationModel.findById(lid);
+    if (!location) {
+      CustomError.create({
+        name: "Location not found",
+        cause: messageError.generatorUserIdError(lid),
+        message: `Location with '${lid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return location;
+  }
 }
