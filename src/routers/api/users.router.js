@@ -6,10 +6,13 @@ import {
 } from "../../validators/user.validator.js";
 import validateInfoMiddleware from "../../middlewares/validateInfo.middleware.js";
 import UsersController from "../../controllers/users.controller.js";
+import { authMiddleware } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.get("/users", async (req, res, next) => {
+router.use(authMiddleware);
+
+router.get("", async (req, res, next) => {
   try {
     const { query } = req;
     const users = await UsersController.get(query);
@@ -20,7 +23,7 @@ router.get("/users", async (req, res, next) => {
 });
 
 router.post(
-  "/users",
+  "",
   validateInfoMiddleware(registerSchema),
   async (req, res, next) => {
     try {
@@ -34,7 +37,7 @@ router.post(
 );
 
 router.get(
-  "/users/:uid",
+  "/:uid",
   validateInfoMiddleware(uidSchema, "params"),
   async (req, res, next) => {
     try {
@@ -50,7 +53,7 @@ router.get(
 );
 
 router.put(
-  "/users/:uid",
+  "/:uid",
   validateInfoMiddleware(uidSchema, "params"),
   validateInfoMiddleware(updateUserSchema),
   async (req, res, next) => {
@@ -70,7 +73,7 @@ router.put(
 );
 
 router.delete(
-  "/users/:uid",
+  "/:uid",
   validateInfoMiddleware(uidSchema, "params"),
   async (req, res, next) => {
     try {
