@@ -119,4 +119,24 @@ export default class LocationsController {
 
     return updatedLocation;
   }
+
+  /**
+   * Eliminar una ubicación por su ID.
+   *
+   * @param {string} lid - ID único de la ubicación (MongoDB ObjectId).
+   * @returns {Promise<Object>} Ubicación eliminada de la base de datos.
+   * @throws CustomError Si no existe una ubicación con el ID especificado.
+   */
+  static async deleteById(lid) {
+    const result = await LocationModel.findByIdAndDelete(lid);
+    if (!result) {
+      CustomError.create({
+        name: "Location not found",
+        cause: messageError.generatorUserIdError(lid),
+        message: `Location with '${lid}' not found`,
+        code: EnumsError.NOT_FOUND_ERROR,
+      });
+    }
+    return result;
+  }
 }
