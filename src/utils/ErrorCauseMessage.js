@@ -24,6 +24,15 @@ const messageError = {
   generatorTruckAlreadyExistsError: (data) => {
     return `The truck with the plates: ${data.plates} already exists`;
   },
+
+  generatorGoogleMapsError: (data) => {
+    return `Todos los campos son requeridos
+    - place_id`;
+  },
+
+  generatorLocationAlreadyExistsError: (data) => {
+    return `The location with id: ${data.place_id} already exists`;
+  },
 };
 
 export default messageError;
