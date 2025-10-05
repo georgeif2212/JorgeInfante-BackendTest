@@ -39,3 +39,7 @@ export const oidSchema = Joi.object({
       "any.required": "Location ID is required",
     }),
 });
+
+export const updateStatusSchema = Joi.object({
+  status: Joi.string().valid("created", "in transit", "completed").required(),
+});
