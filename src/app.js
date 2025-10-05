@@ -20,14 +20,11 @@ app.get("/", (req, res) => {
   res.send("Server funcionando ");
 });
 
-app.use(
-  "/api",
-  usersRouter,
-  authRouter,
-  trucksRouter,
-  locationsRouter,
-  ordersRouter
-);
+app.use("/api/users", usersRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/trucks", trucksRouter);
+app.use("/api/locations", locationsRouter);
+app.use("/api/orders", ordersRouter);
 
 // ! Middleware de error
 app.use(errorHandlerMiddleware);

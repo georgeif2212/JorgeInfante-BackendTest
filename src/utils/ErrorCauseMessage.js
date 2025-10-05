@@ -33,6 +33,10 @@ const messageError = {
   generatorLocationAlreadyExistsError: (data) => {
     return `The location with id: ${data.place_id} already exists`;
   },
+
+  generatorPermissionError: () => {
+    return `User doesn't have permission`;
+  },
 };
 
 export default messageError;

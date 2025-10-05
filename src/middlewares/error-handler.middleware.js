@@ -11,6 +11,7 @@ export const errorHandlerMiddleware = (error, req, res, next) => {
         cause: error.cause,
       });
       break;
+
     case EnumsError.BAD_REQUEST_ERROR:
       res.status(error.code).json({
         status: `error ${error.code}`,
@@ -19,6 +20,7 @@ export const errorHandlerMiddleware = (error, req, res, next) => {
         cause: error.cause,
       });
       break;
+
     case EnumsError.CONFLICT:
       res.status(error.code).json({
         status: `error ${error.code}`,
@@ -27,6 +29,16 @@ export const errorHandlerMiddleware = (error, req, res, next) => {
         cause: error.cause,
       });
       break;
+
+    case EnumsError.UNAUTHORIZED_ERROR:
+      res.status(error.code).json({
+        status: `error ${error.code}`,
+        name: error.name,
+        message: error.message,
+        cause: error.cause,
+      });
+      break;
+
     default:
       return res.status(500).json({
         status: `error 500`,

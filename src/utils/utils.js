@@ -23,6 +23,17 @@ export const isValidPassword = (password, user_password) =>
 export const generateToken = (user, type = "auth") => {
   const { _id, name, email } = user;
   const payload = { _id, name, email, type };
-  const expiresIn = type === "auth" ? "30m" : "1h";
+  const expiresIn = type === "auth" ? "3h" : "1h";
   return jwt.sign(payload, JWT_SECRET, { expiresIn });
+};
+
+export const validateToken = (token) => {
+  return new Promise((resolve) => {
+    jwt.verify(token, JWT_SECRET, (error, payload) => {
+      if (error) {
+        return resolve(false);
+      }
+      resolve(payload);
+    });
+  });
 };
