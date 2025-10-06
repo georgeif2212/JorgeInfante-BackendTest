@@ -4,10 +4,10 @@
  *              y manejo de errores personalizado usando CustomError.
  */
 
-import { CustomError } from "../utils/CustomError.js";
+import { CustomError } from "../utils/errors/CustomError.js";
 import LocationModel from "../models/location.model.js";
-import EnumsError from "../utils/EnumsError.js";
-import messageError from "../utils/ErrorCauseMessage.js";
+import EnumsError from "../utils/errors/EnumsError.js";
+import messageError from "../utils/errors/ErrorCauseMessage.js";
 import GooglePlacesService from "../services/googlePlaces.services.js";
 
 export default class LocationsController {

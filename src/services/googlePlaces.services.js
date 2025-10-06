@@ -5,9 +5,9 @@
  */
 
 import axios from "axios";
-import { CustomError } from "../utils/CustomError.js";
-import messageError from "../utils/ErrorCauseMessage.js";
-import EnumsError from "../utils/EnumsError.js";
+import { CustomError } from "../utils/errors/CustomError.js";
+import messageError from "../utils/errors/ErrorCauseMessage.js";
+import EnumsError from "../utils/errors/EnumsError.js";
 import config from "../config/config.js";
 
 const GOOGLE_API_KEY = config.googleAK;

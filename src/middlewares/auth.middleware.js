@@ -4,9 +4,9 @@
  * Se utiliza para proteger rutas que requieren que el usuario esté autenticado.
  */
 
-import { CustomError } from "../utils/CustomError.js";
-import EnumsError from "../utils/EnumsError.js";
-import messageError from "../utils/ErrorCauseMessage.js";
+import { CustomError } from "../utils/errors/CustomError.js";
+import EnumsError from "../utils/errors/EnumsError.js";
+import messageError from "../utils/errors/ErrorCauseMessage.js";
 import { validateToken } from "../utils/utils.js";
 
 /**
