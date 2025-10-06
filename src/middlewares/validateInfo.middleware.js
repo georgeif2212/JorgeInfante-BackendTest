@@ -1,5 +1,5 @@
-import { CustomError } from "../utils/CustomError.js";
-import EnumsError from "../utils/EnumsError.js";
+import { CustomError } from "../utils/errors/CustomError.js";
+import EnumsError from "../utils/errors/EnumsError.js";
 
 const validateInfoMiddleware =
   (schema, property = "body") =>

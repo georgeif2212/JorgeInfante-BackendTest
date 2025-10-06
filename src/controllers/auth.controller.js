@@ -4,9 +4,9 @@
  * validando credenciales, generando errores personalizados y encriptando contraseñas.
  */
 
-import { CustomError } from "../utils/CustomError.js";
-import EnumsError from "../utils/EnumsError.js";
-import messageError from "../utils/ErrorCauseMessage.js";
+import { CustomError } from "../utils/errors/CustomError.js";
+import EnumsError from "../utils/errors/EnumsError.js";
+import messageError from "../utils/errors/ErrorCauseMessage.js";
 import UsersController from "./users.controller.js";
 import { isValidPassword } from "../utils/utils.js";
 import UserModel from "../models/user.model.js";

@@ -4,10 +4,10 @@
  *              y manejo de errores personalizado usando CustomError.
  */
 
-import { CustomError } from "../utils/CustomError.js";
+import { CustomError } from "../utils/errors/CustomError.js";
 import UserModel from "../models/user.model.js";
-import EnumsError from "../utils/EnumsError.js";
-import messageError from "../utils/ErrorCauseMessage.js";
+import EnumsError from "../utils/errors/EnumsError.js";
+import messageError from "../utils/errors/ErrorCauseMessage.js";
 import { createPasswordHash } from "../utils/utils.js";
 
 export default class UsersController {
