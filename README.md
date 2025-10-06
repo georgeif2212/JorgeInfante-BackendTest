@@ -60,7 +60,7 @@ Proyecto desarrollado en Node.js (JavaScript) + Express + MongoDB (Mongoose). Im
   Obtener un camión por ID.
 
 - **POST** `/api/trucks`:
-  Crear un nuevo camión.
+  Crear un nuevo camión. (Asumí que el user logeado es el que crea el truck, por lo que tomo el id desde req.user._id en lugar de mandarlo por el body) 
 
 - **PATCH** `/api/trucks/:id`:
   Actualizar un camión por ID.
@@ -92,7 +92,7 @@ Proyecto desarrollado en Node.js (JavaScript) + Express + MongoDB (Mongoose). Im
 ### 📦 Orders
 
 - **POST** `/api/orders`:
-  Crear una nueva orden.
+  Crear una nueva orden. (Asumí que el user logeado es el que crea la order, por lo que tomo el id desde req.user._id en lugar de mandarlo por el body)
 
 - **GET** `/api/orders`:
   Listar órdenes con filtros opcionales (`status`, `page`, `limit`).
